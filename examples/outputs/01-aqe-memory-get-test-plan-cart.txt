@@ -1,0 +1,7 @@
+  test-plan/cart [aqe]
+  {
+  "claim": "cart-total fix verified — total updates on quantity change",
+  "evidence": [],
+  "agent": "qe-test-architect",
+  "run": "r-0417"
+}

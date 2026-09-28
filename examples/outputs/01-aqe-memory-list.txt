@@ -1,0 +1,12 @@
+  10 entries in namespace "aqe"
+
+  coverage/cart-service
+  coverage/checkout-service
+  test-plan/checkout
+  test-plan/cart
+  flaky/cart-total-e2e
+  risk/payment-module
+  env/staging-window
+  quality-gate/r-0417
+  claims/test-plan/cart
+  test-plan/readme

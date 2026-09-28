@@ -1,0 +1,13 @@
+# cloned on first boot by .devcontainer/post-create.sh — never committed here
+workspace/
+
+# per-participant state
+.nagual/
+.agentic-qe/
+*.db
+*.db-shm
+*.db-wal
+node_modules/
+target/
+.env
+serve.log

@@ -1,0 +1,44 @@
+# Three services: the workspace you type in, plus the Postgres + Redis that Iron Pets needs.
+# Codespaces, DevPod and the VS Code Dev Containers extension all read this through devcontainer.json.
+
+services:
+  workspace:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ..:/workspaces/masterclass:cached
+      - cargo-cache:/home/node/.cargo/registry
+      - nagual-target:/workspaces/masterclass/workspace/nagual-qe/target
+    command: sleep infinity
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    environment:
+      TZ: Europe/Budapest
+
+  postgres:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ironpets
+      POSTGRES_PASSWORD: ironpets
+      POSTGRES_DB: ironpets
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ironpets -d ironpets"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  cargo-cache:
+  nagual-target:

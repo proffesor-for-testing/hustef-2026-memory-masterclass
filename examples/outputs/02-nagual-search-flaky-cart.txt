@@ -1,0 +1,22 @@
+
+Search Results for: "flaky cart"
+======================================================================
+
+1. Cart total e2e test flakes after evening deploys on ci-ru... (reward: 0.50, effectiveness: 0.50)
+   ID: 5156441d-2b41-4217-a936-5dcac8a7dbe0
+   Domain: qe.flaky
+   Tags: cart, redis, cache, deploy, e2e
+
+2. Cart total e2e test flakes after evening deploys on ci-ru... (reward: 0.50, effectiveness: 0.50)
+   ID: c460771d-1599-4611-98f8-105b8a0306a6
+   Domain: qe.flaky
+   Tags: cart, redis, cache, deploy, e2e
+
+3. Cart total e2e test flakes after evening deploys on ci-ru... (reward: 0.50, effectiveness: 0.50)
+   ID: 47330f9b-5fb7-4ac6-a07e-9833305c3243
+   Domain: qe.flaky
+   Tags: cart, redis, cache, deploy, e2e
+
+======================================================================
+Found 3 results
+

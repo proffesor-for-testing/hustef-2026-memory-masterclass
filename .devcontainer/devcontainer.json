@@ -1,0 +1,62 @@
+{
+  "name": "HUSTEF 2026 · Memory as a Quality Signal",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/masterclass",
+  "shutdownAction": "stopCompose",
+
+  "features": {
+    "ghcr.io/devcontainers/features/rust:1": { "version": "latest", "profile": "minimal" },
+    "ghcr.io/devcontainers/features/python:1": { "version": "3.12", "installTools": false },
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
+
+  "hostRequirements": { "cpus": 4, "memory": "8gb", "storage": "32gb" },
+
+  "forwardPorts": [3000, 3001, 3333, 5432, 6379],
+  "portsAttributes": {
+    "3000": { "label": "Iron Pets · frontend" },
+    "3001": { "label": "Iron Pets · API" },
+    "3333": { "label": "Nagual · dashboard" },
+    "5432": { "label": "PostgreSQL" },
+    "6379": { "label": "Redis" }
+  },
+
+  "containerEnv": {
+    "NAGUAL_HOME": "/workspaces/masterclass/.nagual",
+    "DATABASE_URL_IRONPETS": "postgresql://ironpets:ironpets@postgres:5432/ironpets",
+    "REDIS_URL": "redis://redis:6379",
+    "AQE_SKIP_CODE_INDEX": "1"
+  },
+
+  "remoteEnv": {
+    "PATH": "${containerEnv:PATH}:/home/node/.local/bin:/home/node/.cargo/bin"
+  },
+
+  "postCreateCommand": "bash .devcontainer/post-create.sh",
+  "postStartCommand": "bash .devcontainer/post-start.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "anthropic.claude-code",
+        "rust-lang.rust-analyzer",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "ms-azuretools.vscode-docker",
+        "yzhang.markdown-all-in-one"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "editor.fontSize": 16,
+        "terminal.integrated.fontSize": 16
+      }
+    },
+    "codespaces": {
+      "openFiles": ["README.md", "exercises/00-check-your-setup.md"]
+    }
+  },
+
+  "remoteUser": "node"
+}

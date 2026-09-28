@@ -1,0 +1,28 @@
+
+Domain Insights: All Domains
+------------------------------------------------------------
+
+Overview:
+  Total patterns: 536
+  Patterns with reliable metrics: 1
+  Total usage: 1
+
+Metrics:
+  Success rate: 31.5%
+  Average reward: 0.552
+  Average effectiveness: 0.500
+  Average confidence: 0.508
+
+Trend: Unknown
+
+Time Window Analysis:
+  7d: 536 patterns, avg reward 0.552, success rate 31.5%
+
+Top Patterns:
+  1. Running comprehensive QE scans then fixing all critical issues in priority order (reward: 0.920, quality: 0.634)
+  2. Agent swarms over-claim completion status, hiding real integration gaps (reward: 0.920, quality: 0.634)
+  3. Test engineers and QE leaders need a grounded, evidence-based way to assess t... (reward: 0.855, quality: 0.621)
+  4. Test engineers ask: what should I actually learn to stay relevant as AI takes... (reward: 0.855, quality: 0.621)
+  5. Where should testers and QE leaders go to build genuine understanding of AI l... (reward: 0.855, quality: 0.621)
+
+Generated at: 2026-09-27 13:29:02 UTC

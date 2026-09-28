@@ -1,0 +1,13 @@
+{
+  "$comment": "Copy into .claude/settings.json of the project you want to close the loop in. Records a Nagual outcome after every test command, against the pattern id in .nagual/current-pattern.",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "bash examples/hooks/record-outcome.sh" }
+        ]
+      }
+    ]
+  }
+}

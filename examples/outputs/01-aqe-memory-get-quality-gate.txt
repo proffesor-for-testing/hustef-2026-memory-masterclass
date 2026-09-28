@@ -1,0 +1,10 @@
+  quality-gate/r-0417 [aqe]
+  {
+  "claim": "gate PASSED",
+  "evidence": [
+    "artifacts/gate-r-0417.json"
+  ],
+  "agent": "qe-quality-gate",
+  "run": "r-0417",
+  "note": "gate consumed test-plan/cart as verified"
+}

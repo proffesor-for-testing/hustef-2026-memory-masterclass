@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Seeds the Agentic QE fleet memory inside Iron Pets with what "a fleet that just ran" would leave behind —
 # including ONE planted bare claim (no evidence). Finding it is hands-on #1.
-# Every command here was executed against agentic-qe 3.14.x — syntax is real, not illustrative.
+# Every command here was executed against agentic-qe 3.14.4 — syntax is real, not illustrative.
 set -euo pipefail
 export PATH="$HOME/.local/bin:$PATH"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

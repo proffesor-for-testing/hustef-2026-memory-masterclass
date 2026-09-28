@@ -15,11 +15,13 @@ sudo -n mkdir -p /usr/local/cargo/registry "$WS/nagual-qe/target" 2>/dev/null ||
 sudo -n chown node:node /usr/local/cargo/registry "$WS/nagual-qe/target" 2>/dev/null || true
 
 # ── 1. Coding agents + the fleet CLI ──────────────────────────────────────────
-step "Installing Claude Code, Codex CLI and agentic-qe (global npm)"
+# agentic-qe is pinned: every Block 1 command was verified against this version (override: AQE_VERSION).
+AQE_VERSION="${AQE_VERSION:-3.14.4}"
+step "Installing Claude Code, Codex CLI and agentic-qe $AQE_VERSION (global npm)"
 npm install -g --no-fund --no-audit \
   @anthropic-ai/claude-code \
   @openai/codex \
-  agentic-qe@latest
+  "agentic-qe@$AQE_VERSION"
 
 # ── 2. The three project repos, optionally pinned to a known-good ref ─────────
 # A ref can be a branch, tag or full commit SHA. It is fetched explicitly: a shallow clone only
@@ -40,11 +42,10 @@ clone_or_update() {
 }
 clone_or_update https://github.com/proffesor-for-testing/agentic-qe.git          "$WS/agentic-qe"
 clone_or_update https://github.com/proffesor-for-testing/iron-pets-by-jarvis.git "$WS/iron-pets"
-# nagual-qe 0.2.0 (head of proffesor-for-testing/nagual-qe PR #40): builds again after the dependabot
-# sha3/sqlx/axum bumps, `nagual serve` starts and serves the dashboard on a fresh DB, `knowledge list`
-# pagination fixed, logs on stderr, PII redaction on the HTTP read path.
-# Repin to the merge commit once the PR is merged. Override with NAGUAL_QE_REF=<branch|tag|sha>.
-clone_or_update https://github.com/proffesor-for-testing/nagual-qe.git           "$WS/nagual-qe" "${NAGUAL_QE_REF:-5d1a3943533886f99be169e81ef29bab433956cc}"
+# nagual-qe 0.2.0 — merge commit of proffesor-for-testing/nagual-qe#40 (build fix, asymmetric reward rule
+# with security failures, trained router, working `nagual serve`, semantic search over all patterns).
+# Override with NAGUAL_QE_REF=<branch|tag|sha>.
+clone_or_update https://github.com/proffesor-for-testing/nagual-qe.git           "$WS/nagual-qe" "${NAGUAL_QE_REF:-2ddb7faf366b3ebae8154d558961f60db826b373}"
 
 # ── 3. ONNX Runtime + sentence model for semantic search (pinned, checksum-verified) ──
 # Nagual embeds patterns with all-MiniLM-L6-v2 (384-d, projected to 128-d) through ONNX Runtime.

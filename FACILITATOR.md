@@ -46,9 +46,11 @@ vocabulary — it sets up hands-on #2's "whose words did you store it in?"
 
 ## Known quirks (verified 28 Sep 2026, end-to-end in a fresh devcontainer)
 
-- **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 fix commit (build fix for the dependabot sha3/sqlx/axum
+- **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 merge commit (`2ddb7fa`, nagual-qe#40) (build fix for the dependabot sha3/sqlx/axum
   bumps, one asymmetric reward rule incl. security failures, trained router, semantic search over all patterns, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
-  HTTP read path). Override with `NAGUAL_QE_REF=<ref>`. Once the PR is merged, repin to the merge commit.
+  HTTP read path). Override with `NAGUAL_QE_REF=<ref>`.
+- **agentic-qe is pinned to 3.14.4** (`AQE_VERSION` overrides). Block 1 was verified against it; don't switch
+  to `@latest` without running `make smoke`.
 - **Reward steps (nagual-qe 0.2.0, matches slide 19 once it adds the security row):** success +0.10,
   partial +0.05, failure −0.15, security failure −0.30, clamped to [0, 1]. A fresh pattern: 0.50 → 0.35 on
   one failure, → 0.45 on a following success. `learn record` prints the step, so let the room read it off.

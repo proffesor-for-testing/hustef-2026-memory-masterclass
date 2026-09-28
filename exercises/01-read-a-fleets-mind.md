@@ -68,4 +68,4 @@ aqe memory store --key test-plan/wishlist --namespace aqe \
   --value '{"claim":"wishlist add/remove covered","evidence":["tests/wishlist.spec.ts"],"agent":"you"}'
 ```
 
-Commands verified against agentic-qe 3.14.3 — `aqe memory store | get | search | list | delete | share | usage`.
+Commands verified against agentic-qe 3.14.4 (the version the devcontainer installs) — `aqe memory store | get | search | list | delete | share | usage`.

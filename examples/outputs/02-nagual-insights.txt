@@ -25,4 +25,4 @@ Top Patterns:
   4. Test engineers ask: what should I actually learn to stay relevant as AI takes... (reward: 0.855, quality: 0.621)
   5. Where should testers and QE leaders go to build genuine understanding of AI l... (reward: 0.855, quality: 0.621)
 
-Generated at: 2026-09-28 07:53:08 UTC
+Generated at: 2026-09-28 08:23:03 UTC

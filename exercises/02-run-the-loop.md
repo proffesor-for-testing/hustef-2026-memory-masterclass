@@ -58,17 +58,24 @@ Pretend a week passed and you applied the pattern. Record what happened — hone
 # it worked
 nagual learn record <id> success --feedback "worked on CI too" --db-path $NAGUAL_DB
 
-# it didn't — and you must say why (specification | misalignment | verification | resource | unknown)
+# it didn't — and you must say why (specification | misalignment | verification | resource | security | unknown)
 nagual learn record <id> failure --failure-mode verification \
   --feedback "couldn't tell whether the fix took — no log access" --db-path $NAGUAL_DB
 ```
 
-`partial` and `skip` exist too. Each outcome nudges the pattern's reward a step toward that outcome's
-target — 0.9 for success, 0.2 for failure — so one outcome never decides anything. The output shows the
-move, e.g. `Pattern reward: 0.500 -> 0.470 (moved toward 0.20, this outcome's target)`. It takes a run of
-consistent outcomes to climb toward Reflex, and a run of failures to sink a pattern. The Beta score
-(`quality_alpha` / `quality_beta`) counts the evidence separately, so "0.9 over 2 trials" and "0.9 over
-40 trials" stay distinguishable.
+`partial` exists too. The score moves by a fixed, deliberately asymmetric step:
+
+| Outcome | Reward step |
+|---|---|
+| success | **+0.10** |
+| partial | +0.05 |
+| failure (specification, misalignment, verification, resource, unknown) | **−0.15** |
+| failure `--failure-mode security` | **−0.30** |
+
+The output shows the move, e.g. `Pattern reward: 0.50 -> 0.35  (failure -0.15)`. Being wrong costs
+more than being right earns — wrong-confident beliefs are expensive. A security failure costs double.
+The Beta score (`quality_alpha` / `quality_beta`) counts the evidence separately, so "0.9 over 2 trials"
+and "0.9 over 40 trials" stay distinguishable.
 
 ## Step 4 — look at what changed (2 min)
 

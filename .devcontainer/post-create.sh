@@ -44,7 +44,7 @@ clone_or_update https://github.com/proffesor-for-testing/iron-pets-by-jarvis.git
 # sha3/sqlx/axum bumps, `nagual serve` starts and serves the dashboard on a fresh DB, `knowledge list`
 # pagination fixed, logs on stderr, PII redaction on the HTTP read path.
 # Repin to the merge commit once the PR is merged. Override with NAGUAL_QE_REF=<branch|tag|sha>.
-clone_or_update https://github.com/proffesor-for-testing/nagual-qe.git           "$WS/nagual-qe" "${NAGUAL_QE_REF:-9bc6b5042b990e3f4146def56ad35a79a9a968d9}"
+clone_or_update https://github.com/proffesor-for-testing/nagual-qe.git           "$WS/nagual-qe" "${NAGUAL_QE_REF:-73d46ee67de169ffb0f16048dba741f75dd140cf}"
 
 # ── 3. Nagual: build from source (hash embedder + dashboard; no ONNX runtime needed) ──
 if [ "${NAGUAL_SKIP_BUILD:-0}" != "1" ]; then

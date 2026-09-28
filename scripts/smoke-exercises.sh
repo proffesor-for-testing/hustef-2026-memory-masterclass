@@ -2,7 +2,7 @@
 # Facilitator pre-flight: runs every participant-facing command from exercises/00-03 in order, then
 # resets both memory systems. Run it in your own environment the day before (`make smoke`).
 # Look for: 3 cart keys (not 0 for "cart*"), the CLAIM gate line, exit=3/exit=1 on the wrapper checks,
-# Pattern reward 0.500 -> 0.470, and HTTP 200s for the dashboard and Iron Pets.
+# Pattern reward 0.50 -> 0.35 then 0.35 -> 0.45, and HTTP 200s for the dashboard and Iron Pets.
 set -uo pipefail
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 cd /workspaces/masterclass
@@ -27,6 +27,7 @@ h "02 step2 search back"; nagual knowledge search "login mondays snapshot" --lim
 h "02 get before"; nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|tier|effect|confidence"
 h "02 step3 failure"; nagual learn record $ID failure --failure-mode verification --feedback "couldn't tell whether the fix took — no log access" --db-path $NAGUAL_DB; echo "exit=$?"
 h "02 get after failure"; nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|tier|effect"
+h "02 security failure on a second pattern"; OUT2=$(nagual knowledge store "Debug endpoint left enabled in staging build" --solution "Guard it with a feature flag" --domain "qe.security" --tags "debug,staging" --db-path $NAGUAL_DB); ID2=$(printf '%s\n' "$OUT2" | sed -n 's/^ID: *//p' | head -1); nagual learn record $ID2 failure --failure-mode security --feedback "exposed tokens" --db-path $NAGUAL_DB | grep "Pattern reward"
 h "02 step3 success"; nagual learn record $ID success --feedback "worked on CI too" --db-path $NAGUAL_DB; echo "exit=$?"
 h "02 get after success"; nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|tier|effect"
 h "02 step4 insights"; nagual learn insights --windows 7d --db-path $NAGUAL_DB; echo "exit=$?"

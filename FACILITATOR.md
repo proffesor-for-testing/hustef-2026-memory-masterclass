@@ -47,11 +47,11 @@ vocabulary — it sets up hands-on #2's "whose words did you store it in?"
 ## Known quirks (verified 28 Sep 2026, end-to-end in a fresh devcontainer)
 
 - **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 fix commit (build fix for the dependabot sha3/sqlx/axum
-  bumps, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
+  bumps, one asymmetric reward rule incl. security failures, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
   HTTP read path). Override with `NAGUAL_QE_REF=<ref>`. Once the PR is merged, repin to the merge commit.
-- **Reward moves in small steps.** Each outcome moves reward ~10% of the way toward its target (0.9 success,
-  0.2 failure): a fresh pattern goes 0.500 → 0.470 on one failure, 0.470 → 0.513 on a following success. There
-  is no fixed "−0.15" step. `learn record` prints the before/after, so let the room read it off the screen.
+- **Reward steps (nagual-qe 0.2.0, matches slide 19 once it adds the security row):** success +0.10,
+  partial +0.05, failure −0.15, security failure −0.30, clamped to [0, 1]. A fresh pattern: 0.50 → 0.35 on
+  one failure, → 0.45 on a following success. `learn record` prints the step, so let the room read it off.
 - **`flaky` ≠ `flakes`.** FTS5 has no stemming: `search "flaky"` does not find the cart starter pattern ("flakes").
   Exercise 02 turns this into the vocabulary point on purpose.
 - **aqe is chatty.** agentic-qe prints ~90 init lines (stderr) per command. Interactive shells in the container

@@ -39,5 +39,11 @@ store "Same bug filed twice with different wording, months apart" \
 touch "$MARK"
 fi
 
+# (c) embeddings for semantic search (`knowledge search --semantic`). Only patterns without one are
+# embedded, so re-running is cheap; a fresh database takes ~1 min on 4 cores.
+echo "Embedding patterns for semantic search (all-MiniLM-L6-v2)..."
+nagual learn embed --db-path "$DB" 2>/dev/null | grep -E "^  (Embedded|Errors|Duration):|already have embeddings" \
+  || echo "  ! embedding skipped - semantic search unavailable; FTS search still works (see FACILITATOR.md)"
+
 echo
 nagual status --db-path "$DB" 2>/dev/null | grep -E "Total Patterns|Avg Reward" || true

@@ -20,7 +20,18 @@ nagual knowledge search "flaky" --limit 5 --db-path $NAGUAL_DB
 *hypothesis with a score*, not a fact.
 
 Notice that `flaky` does not find the masterclass starter about the cart test — it says *flakes*. Full-text
-search matches words, not meanings. Try `nagual knowledge search "flakes cart"`. Keep that in mind for Step 1.
+search (FTS5) matches words, not meanings. Now ask by meaning — every pattern already has a 128-d ONNX
+embedding (all-MiniLM-L6-v2, running locally):
+
+```bash
+nagual knowledge search "flaky cart test" --semantic --limit 3 --db-path $NAGUAL_DB
+nagual knowledge search "unstable shopping basket test" --semantic --limit 3 --db-path $NAGUAL_DB
+```
+
+The cart pattern comes back first — although the second query shares no word with it. Now try a single
+word, `"flaky" --semantic`: the results get vague. Sentence embeddings need a sentence. Both modes are
+useful: FTS is exact and explainable, semantic search forgives vocabulary but wants context. Keep both
+in mind for Step 1.
 
 ## Step 1 — store something you solved this month (6 min)
 
@@ -48,7 +59,15 @@ nagual knowledge search "<two or three of your words>" --limit 5 --db-path $NAGU
 ```
 
 Did it come back? If not, that's the most useful thing you'll learn today — whose vocabulary did you store
-it in? Store it again with better words. (Don't delete the old one; consolidation will merge them later.)
+it in? Now give it an embedding (only new patterns are embedded, a second or two) and ask a colleague's
+way — words you did *not* use:
+
+```bash
+nagual learn embed --db-path $NAGUAL_DB
+nagual knowledge search "<the same problem, in someone else's words>" --semantic --limit 5 --db-path $NAGUAL_DB
+```
+
+Semantic search rescues vocabulary mismatches; it does not rescue a vague problem statement.
 
 ## Step 3 — tell it the truth (4 min)
 

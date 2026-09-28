@@ -1,0 +1,21 @@
+  (hyperbolic retrieval: 520 candidates scored)
+
+Search Results for: "unstable shopping basket test"
+======================================================================
+
+1. Cart total e2e test flakes after evening deploys on ci-ru... (reward: 0.50, effectiveness: 0.50)
+   ID: d7d022d9-f860-4f28-a3db-845c05ccdd11
+   Domain: qe.flaky
+   Tags: cart, redis, cache, deploy, e2e
+
+2. Test Coverage Undermining Dynamics (Weinberg) — Even we... (reward: 0.50, effectiveness: 0.50)
+   ID: df3b5d79-1698-4ad8-925b-fd1890ef9d06
+   Domain: quality-engineering
+
+3. Exploratory testing insights from Flow Nexus platform (reward: 0.35, effectiveness: 0.50)
+   ID: 83f4d9ed-0f70-4d64-ab8f-ffb2a27520cc
+   Domain: flow-nexus-testing
+
+======================================================================
+Found 3 results
+

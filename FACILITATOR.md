@@ -47,13 +47,19 @@ vocabulary — it sets up hands-on #2's "whose words did you store it in?"
 ## Known quirks (verified 28 Sep 2026, end-to-end in a fresh devcontainer)
 
 - **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 fix commit (build fix for the dependabot sha3/sqlx/axum
-  bumps, one asymmetric reward rule incl. security failures, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
+  bumps, one asymmetric reward rule incl. security failures, trained router, semantic search over all patterns, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
   HTTP read path). Override with `NAGUAL_QE_REF=<ref>`. Once the PR is merged, repin to the merge commit.
 - **Reward steps (nagual-qe 0.2.0, matches slide 19 once it adds the security row):** success +0.10,
   partial +0.05, failure −0.15, security failure −0.30, clamped to [0, 1]. A fresh pattern: 0.50 → 0.35 on
   one failure, → 0.45 on a following success. `learn record` prints the step, so let the room read it off.
-- **`flaky` ≠ `flakes`.** FTS5 has no stemming: `search "flaky"` does not find the cart starter pattern ("flakes").
-  Exercise 02 turns this into the vocabulary point on purpose.
+- **`flaky` ≠ `flakes` — FTS vs semantic.** FTS5 has no stemming, so `search "flaky"` misses the cart starter;
+  `search "flaky cart test" --semantic` and `"unstable shopping basket test" --semantic` rank it first. A
+  single word (`"flaky" --semantic`) gives vague results — sentence embeddings need a sentence; say so. Semantic search
+  needs embeddings: seeding runs `nagual learn embed` (~1 min for 520 patterns on 4 cores, so `make reset`
+  takes that long too); participants run it again after storing their own pattern (seconds).
+- **ONNX runtime + model** (ONNX Runtime 1.24.1, all-MiniLM-L6-v2 at a pinned Hugging Face revision, both
+  SHA-256-verified) are downloaded by post-create into `~/.local/lib/onnxruntime` and `~/.nagual/models` —
+  ~100 MB, cached by prebuilds. `make check` shows `onnx runtime`, `embedding model` and `embeddings N/N`.
 - **aqe is chatty.** agentic-qe prints ~90 init lines (stderr) per command. Interactive shells in the container
   filter the known chatter (`aqe` is a shell function; `command aqe …` gives raw output). A one-line
   `[WARN] … No model providers` is also filtered — harmless.

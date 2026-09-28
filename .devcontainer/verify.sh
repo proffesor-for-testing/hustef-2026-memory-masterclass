@@ -19,6 +19,12 @@ command -v nagual  >/dev/null && ok nagual  "$(v nagual --version)"        || mi
 command -v gh      >/dev/null && ok gh      "$(v gh --version)"            || miss gh "optional"
 
 [ -d "$ROOT/workspace/iron-pets/.agentic-qe" ] && ok "fleet memory" "$ROOT/workspace/iron-pets/.agentic-qe" || miss "fleet memory" "run: make reset"
+[ -f "${ORT_DYLIB_PATH:-/nonexistent}" ] && ok "onnx runtime" "$(basename "$(readlink -f "$ORT_DYLIB_PATH")")" || miss "onnx runtime" "bash .devcontainer/post-create.sh"
+[ -f "${NAGUAL_MODEL_DIR:-$HOME/.nagual/models}/all-MiniLM-L6-v2.onnx" ] && ok "embedding model" "all-MiniLM-L6-v2" || miss "embedding model" "bash .devcontainer/post-create.sh"
+if [ -f "$ROOT/.nagual/nagual.db" ] && command -v sqlite3 >/dev/null; then
+  read -r TOTAL EMB <<<"$(sqlite3 -separator ' ' "$ROOT/.nagual/nagual.db" "SELECT COUNT(*), COALESCE(SUM(embedding IS NOT NULL AND length(embedding) > 0), 0) FROM reasoning_patterns" 2>/dev/null)"
+  [ -n "${TOTAL:-}" ] && [ "$TOTAL" = "$EMB" ] && ok "embeddings" "$EMB/$TOTAL patterns" || miss "embeddings" "${EMB:-0}/${TOTAL:-?} patterns - run: make reset"
+fi
 [ -f "$ROOT/.nagual/nagual.db" ] && ok "nagual db" "$ROOT/.nagual/nagual.db ($(du -h "$ROOT/.nagual/nagual.db" | cut -f1))" || miss "nagual db" "run: make reset"
 
 if pg_isready -h postgres -U ironpets >/dev/null 2>&1; then ok postgres "reachable (postgres:5432)"; else miss postgres "not reachable — Iron Pets UI demo only; memory exercises unaffected"; fi

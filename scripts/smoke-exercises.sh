@@ -2,7 +2,7 @@
 # Facilitator pre-flight: runs every participant-facing command from exercises/00-03 in order, then
 # resets both memory systems. Run it in your own environment the day before (`make smoke`).
 # Look for: 3 cart keys (not 0 for "cart*"), the CLAIM gate line, exit=3/exit=1 on the wrapper checks,
-# Pattern reward 0.50 -> 0.35 then 0.35 -> 0.45, and HTTP 200s for the dashboard and Iron Pets.
+# Pattern reward 0.50 -> 0.35 then 0.35 -> 0.45, semantic hits ranked 1st, and HTTP 200s for the dashboard and Iron Pets.
 set -uo pipefail
 export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 cd /workspaces/masterclass
@@ -22,8 +22,10 @@ cd /workspaces/masterclass
 export NAGUAL_DB=$PWD/.nagual/nagual.db
 h "02 step0 status"; nagual status --db-path $NAGUAL_DB; echo "exit=$?"
 h "02 step0 search flaky"; nagual knowledge search "flaky" --limit 5 --db-path $NAGUAL_DB; echo "exit=$?"
+h "02 step0 semantic (want: Cart total ... first, twice)"; nagual knowledge search "flaky cart test" --semantic --limit 3 --db-path $NAGUAL_DB | grep -E "^1\\."; nagual knowledge search "unstable shopping basket test" --semantic --limit 3 --db-path $NAGUAL_DB | grep -E "^1\\."
 h "02 step1 store"; OUT=$(nagual knowledge store "Login e2e test fails only on Mondays after the weekend DB snapshot" --solution "Session table is truncated by the Sunday snapshot job; seed a fresh session in the test setup" --domain "qe.flaky" --tags "login,e2e,snapshot" --confidence 0.7 --db-path $NAGUAL_DB); echo "$OUT"; ID=$(printf '%s\n' "$OUT" | sed -n 's/^ID: *//p' | head -1); echo "ID=$ID"
 h "02 step2 search back"; nagual knowledge search "login mondays snapshot" --limit 5 --db-path $NAGUAL_DB; echo "exit=$?"
+h "02 step2 embed + semantic in other words (want: Login ... first)"; nagual learn embed --db-path $NAGUAL_DB | grep -E "Embedded|already"; nagual knowledge search "sign-in end-to-end check breaks at the start of the week" --semantic --limit 3 --db-path $NAGUAL_DB | grep -E "^1\\."
 h "02 get before"; nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|tier|effect|confidence"
 h "02 step3 failure"; nagual learn record $ID failure --failure-mode verification --feedback "couldn't tell whether the fix took — no log access" --db-path $NAGUAL_DB; echo "exit=$?"
 h "02 get after failure"; nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|tier|effect"

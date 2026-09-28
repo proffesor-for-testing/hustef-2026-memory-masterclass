@@ -38,6 +38,7 @@ make check
 | `claude` (Claude Code) and `codex` (OpenAI Codex CLI) | coding agents, for the optional "drive the fleet" demo — bring your own login |
 | `aqe` — [agentic-qe](https://github.com/proffesor-for-testing/agentic-qe) | the fleet and its **operational memory** (Block 1) |
 | `nagual` — [nagual-qe](https://github.com/proffesor-for-testing/nagual-qe), built from source | the self-learning **meta-memory** (Block 2) |
+| ONNX Runtime + all-MiniLM-L6-v2 | local 128-d embeddings for `nagual knowledge search --semantic` — nothing leaves the container |
 | [Iron Pets](https://github.com/proffesor-for-testing/iron-pets-by-jarvis) + Postgres + Redis | the demo e-commerce app with the cart-total bug |
 | `gh`, `jq`, `sqlite3`, `tmux`, `rg` | the small tools the exercises use |
 

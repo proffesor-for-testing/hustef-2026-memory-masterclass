@@ -28,7 +28,9 @@
     "DATABASE_URL_IRONPETS": "postgresql://ironpets:ironpets@postgres:5432/ironpets",
     "REDIS_URL": "redis://redis:6379",
     "AQE_SKIP_CODE_INDEX": "1",
-    "RUST_LOG": "error"
+    "RUST_LOG": "error",
+    "ORT_DYLIB_PATH": "/home/node/.local/lib/onnxruntime/libonnxruntime.so",
+    "NAGUAL_MODEL_DIR": "/home/node/.nagual/models"
   },
 
   "remoteEnv": {

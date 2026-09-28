@@ -1,0 +1,9 @@
+
+Outcome Recorded
+--------------------------------------------------
+Pattern ID: 59d401ef-c65c-4a88-8a3a-b3c09a135a67
+Outcome: failure
+Pattern reward: 0.500 -> 0.470  (moved toward 0.20, this outcome's target)
+Feedback: couldn't tell whether the fix took — no log access
+--------------------------------------------------
+

@@ -8,7 +8,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ..:/workspaces/masterclass:cached
-      - cargo-cache:/home/node/.cargo/registry
+      - cargo-cache:/usr/local/cargo/registry   # CARGO_HOME of the rust devcontainer feature
       - nagual-target:/workspaces/masterclass/workspace/nagual-qe/target
     command: sleep infinity
     depends_on:

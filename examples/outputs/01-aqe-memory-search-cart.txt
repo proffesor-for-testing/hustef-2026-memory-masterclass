@@ -1,6 +1,5 @@
-  4 result(s) via pattern search
+  3 result(s) via pattern search
 
   coverage/cart-service [aqe]
   test-plan/cart [aqe]
   flaky/cart-total-e2e [aqe]
-  claims/test-plan/cart [aqe]

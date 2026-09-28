@@ -16,8 +16,11 @@ nagual status --db-path $NAGUAL_DB
 nagual knowledge search "flaky" --limit 5 --db-path $NAGUAL_DB
 ```
 
-Five hundred-odd QE patterns came with the seed. Five more are masterclass starters. Every one of them is a
+515 QE patterns came with the seed. Five more are masterclass starters (520 in total). Every one of them is a
 *hypothesis with a score*, not a fact.
+
+Notice that `flaky` does not find the masterclass starter about the cart test — it says *flakes*. Full-text
+search matches words, not meanings. Try `nagual knowledge search "flakes cart"`. Keep that in mind for Step 1.
 
 ## Step 1 — store something you solved this month (6 min)
 
@@ -60,7 +63,12 @@ nagual learn record <id> failure --failure-mode verification \
   --feedback "couldn't tell whether the fix took — no log access" --db-path $NAGUAL_DB
 ```
 
-`partial` and `skip` exist too. Success moves reward up a little; failure moves it down a lot (in the build we ship, one failure took a fresh pattern from 0.50 to 0.20). The asymmetry is deliberate: wrong-confident beliefs cost more than uncertain ones.
+`partial` and `skip` exist too. Each outcome nudges the pattern's reward a step toward that outcome's
+target — 0.9 for success, 0.2 for failure — so one outcome never decides anything. The output shows the
+move, e.g. `Pattern reward: 0.500 -> 0.470 (moved toward 0.20, this outcome's target)`. It takes a run of
+consistent outcomes to climb toward Reflex, and a run of failures to sink a pattern. The Beta score
+(`quality_alpha` / `quality_beta`) counts the evidence separately, so "0.9 over 2 trials" and "0.9 over
+40 trials" stay distinguishable.
 
 ## Step 4 — look at what changed (2 min)
 

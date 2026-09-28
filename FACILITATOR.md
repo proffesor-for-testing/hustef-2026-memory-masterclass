@@ -7,6 +7,9 @@
 - Bring the repo on a USB stick too (`git bundle create masterclass.bundle --all`) for the person whose
   laptop can't reach GitHub.
 - Terminal at 28–32 pt, high-contrast theme. `tmux` is installed for split panes.
+- The day before: `make smoke` in a fresh Codespace — it runs every participant command from exercises 00–03
+  (plus the dashboard and Iron Pets) and resets afterwards. Read its output against the checklist at the top of
+  `scripts/smoke-exercises.sh`.
 - Run `make reset` in your own environment right before you start — the planted claim must be there.
 - Backup recordings of both hands-on blocks in case the room network dies (record with `asciinema`).
 
@@ -33,28 +36,33 @@ vocabulary — it sets up hands-on #2's "whose words did you store it in?"
 
 | Symptom | Do |
 |---|---|
-| `nagual` missing in someone's environment | `NAGUAL_SKIP_BUILD=0 bash .devcontainer/post-create.sh` — or pair them with a neighbour; the exercise is pairs anyway |
+| `nagual` missing in someone's environment | `make setup` (re-runs post-create; ~2 min build on 4+ cores) — or pair them with a neighbour; the exercise is pairs anyway |
 | `aqe memory list` shows 0 entries | `make reset` (re-inits `.agentic-qe` in Iron Pets and reseeds) |
 | Semantic-indexing warning on `aqe memory store` | Expected — no embedder endpoint configured. Pattern (glob) search is what the exercise uses. |
 | Iron Pets won't start | It's only for the UI demo; the memory exercises never touch it. Skip it. |
 | Codespaces quota / no GitHub account | DevPod on the presenter laptop, screen-shared; or the USB bundle + local Docker |
 | Room network dies | `cat` saved outputs from `examples/outputs/` and discuss |
+| Dashboard on :3333 shows nothing | `make nagual-ui`, then check `.nagual/serve.log` |
 
-## Known quirks (verified 27 Sep 2026)
+## Known quirks (verified 28 Sep 2026, end-to-end in a fresh devcontainer)
 
-- **nagual-qe `main` does not compile.** Dependabot merged breaking bumps (sha3 0.12 in #26, sqlx 0.9 in #29).
-  The devcontainer pins `54f6932`, the last green commit. Fix main, then bump the pin in `post-create.sh`.
-- **Reward step.** The slides say −0.15 per failure; the shipped build dropped a fresh pattern 0.50 → 0.20 on
-  one `failure`. Say "down a lot, up a little" rather than quoting the number, or fix the slide.
+- **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 fix commit (build fix for the dependabot sha3/sqlx/axum
+  bumps, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
+  HTTP read path). Override with `NAGUAL_QE_REF=<ref>`. Once the PR is merged, repin to the merge commit.
+- **Reward moves in small steps.** Each outcome moves reward ~10% of the way toward its target (0.9 success,
+  0.2 failure): a fresh pattern goes 0.500 → 0.470 on one failure, 0.470 → 0.513 on a following success. There
+  is no fixed "−0.15" step. `learn record` prints the before/after, so let the room read it off the screen.
+- **`flaky` ≠ `flakes`.** FTS5 has no stemming: `search "flaky"` does not find the cart starter pattern ("flakes").
+  Exercise 02 turns this into the vocabulary point on purpose.
+- **aqe is chatty.** agentic-qe prints ~90 init lines (stderr) per command. Interactive shells in the container
+  filter the known chatter (`aqe` is a shell function; `command aqe …` gives raw output). A one-line
+  `[WARN] … No model providers` is also filtered — harmless.
 - **`aqe memory store` warns about semantic indexing** — no embedder endpoint. Harmless; glob search is what
   the exercise uses.
-- **`nagual` prints JSON log lines on stdout.** The devcontainer installs a wrapper that strips them
-  (`nagual-bin` is the raw binary).
-- **`nagual knowledge list --domain X --limit N` applies the limit before the domain filter** — with a small N
-  it returns nothing. Use `search`, or `--limit 5000` and cut the output (see `examples/hooks/preload-patterns.sh`).
-  Worth a bug report against nagual-qe (`run_list` in `src/cli/knowledge.rs`).
 - **Nagual defaults to `./nagual.db` in the current directory.** Every command in the exercises passes
   `--db-path $NAGUAL_DB`; if someone "loses" their patterns, they ran a command without it from another folder.
+- **Iron Pets frontend** needs `npm install --legacy-peer-deps` (eslint-config-next peer range); post-create does
+  that. The backend has no migrations — post-create uses `prisma db push` + `prisma db seed`.
 
 ## Optional demos (facilitator machine only)
 

@@ -13,9 +13,11 @@ echo "These are the highest-reward patterns for the domains this run touches. Tr
 for d in "$@"; do
   echo
   echo "## $d"
-  # NOTE: nagual applies --limit BEFORE the --domain filter (src/cli/knowledge.rs, run_list), so a small limit
-  # returns nothing. Ask for everything, then cut the table here.
-  nagual knowledge list --domain "$d" --sort reward --limit 5000 --db-path "$DB" 2>/dev/null \
-    | awk -v n="$LIMIT" '/^[0-9a-f]{8}-/{c++; if(c>n) next} {print}' \
-    || echo "_(no patterns yet — this run will create the first ones)_"
+  # Needs nagual-qe >= 0.2.0 — earlier builds applied --limit before the --domain filter.
+  out="$(nagual knowledge list --domain "$d" --sort reward --limit "$LIMIT" --db-path "$DB" 2>/dev/null)"
+  if printf '%s\n' "$out" | grep -qE '^[0-9a-f]{8}-'; then
+    printf '%s\n' "$out"
+  else
+    echo "_(no patterns yet — this run will create the first ones)_"
+  fi
 done

@@ -71,6 +71,7 @@ make check     # is everything installed and reachable?
 make reset     # wipe + reseed both memory systems (between attempts, or between sessions)
 make ironpets  # start the Iron Pets app on :3000 / :3001 (optional — only for the UI demo)
 make nagual-ui # (re)start the Nagual dashboard on :3333
+make smoke     # facilitator pre-flight: run every exercise command, then reset
 ```
 
 ## Taking it home

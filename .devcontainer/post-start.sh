@@ -5,7 +5,7 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 # Nagual dashboard in the background (Block 2 demo). Harmless if the binary is missing.
-if command -v nagual >/dev/null 2>&1 && ! pgrep -f "nagual serve" >/dev/null 2>&1; then
+if command -v nagual >/dev/null 2>&1 && ! pgrep -f "[n]agual serve" >/dev/null 2>&1; then
   ( cd "$ROOT/.nagual" && nohup nagual serve --port 3333 --db-path "$ROOT/.nagual/nagual.db" >"$ROOT/.nagual/serve.log" 2>&1 & ) || true
 fi
 

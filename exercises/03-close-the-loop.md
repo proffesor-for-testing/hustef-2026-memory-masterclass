@@ -15,7 +15,7 @@ outcomes *automatically*, preload proven patterns *next run*.
 
 ## Piece 1 — the write gate (`examples/hooks/memory-write-gate.sh`)
 
-A 20-line shell gate: refuses to store an entry as a *result* unless every path in its `evidence` list
+A shell gate of under 30 lines: refuses to store an entry as a *result* unless every path in its `evidence` list
 exists. Everything else is stored under `claims/` instead. Run it against the bare claim from hands-on #1:
 
 ```bash
@@ -30,8 +30,9 @@ It lands under `claims/test-plan/cart`, not `test-plan/cart`. The gate can't be 
 
 A Claude Code `PostToolUse` hook: when a test command exits, it records `success` or `failure` against the
 pattern id named in `.nagual/current-pattern`. Wire it in `.claude/settings.json` (example in
-`examples/hooks/claude-settings.example.json`). Codex users: the same script works from a `codex exec`
-wrapper — see the comment at the top of the file.
+`examples/hooks/claude-settings.example.json`). Codex users (or CI): run the test command through it —
+`bash examples/hooks/record-outcome.sh -- npm test`. The wrapped command's exit code is passed through, so a
+red run stays red.
 
 ## Piece 3 — preload (`examples/hooks/preload-patterns.sh`)
 

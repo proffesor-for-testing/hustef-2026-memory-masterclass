@@ -13,21 +13,25 @@ ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
 DB="${NAGUAL_DB:-$ROOT/.nagual/nagual.db}"
 PID_FILE="$ROOT/.nagual/current-pattern"
 
-[ -s "$PID_FILE" ] || exit 0          # nothing in play → nothing to record
-PATTERN_ID="$(tail -n1 "$PID_FILE")"
-
+MODE=hook
 if [ "${1:-}" = "--" ]; then          # wrapper mode: run the command ourselves
-  shift; "$@"; CODE=$?; CMD="$*"
+  MODE=wrapper; shift; "$@"; CODE=$?; CMD="$*"
 else                                  # hook mode: read Claude Code's PostToolUse payload
   PAYLOAD="$(cat)"
   CMD="$(printf '%s' "$PAYLOAD" | jq -r '.tool_input.command // empty')"
   CODE="$(printf '%s' "$PAYLOAD" | jq -r '.tool_response.exit_code // .tool_response.exitCode // 0')"
 fi
 
+# In wrapper mode the wrapped command's exit code is passed through — a red test run must stay red.
+finish() { if [ "$MODE" = wrapper ]; then exit "$CODE"; else exit 0; fi; }
+
+[ -s "$PID_FILE" ] || finish          # nothing in play → nothing to record
+PATTERN_ID="$(tail -n1 "$PID_FILE")"
+
 # only test-ish commands count as outcomes; everything else is noise
 case "$CMD" in
   *"npm test"*|*"npx jest"*|*"npx playwright"*|*"cargo test"*|*"pytest"*|*"aqe test"*) ;;
-  *) exit 0 ;;
+  *) finish ;;
 esac
 
 if [ "$CODE" = "0" ]; then
@@ -38,4 +42,4 @@ else
   nagual learn record "$PATTERN_ID" failure --failure-mode verification \
     --feedback "auto: '$CMD' exit $CODE — reclassify me" --db-path "$DB" >/dev/null 2>&1
 fi
-exit 0
+finish

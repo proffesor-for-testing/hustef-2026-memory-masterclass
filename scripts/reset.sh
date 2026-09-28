@@ -11,8 +11,9 @@ bash "$ROOT/scripts/seed-fleet-memory.sh"
 
 echo
 echo "Resetting Nagual"
-pkill -f "nagual serve" 2>/dev/null || true
-rm -f "$ROOT/.nagual/nagual.db" "$ROOT/.nagual/nagual.db-shm" "$ROOT/.nagual/nagual.db-wal"
+pkill -f "[n]agual serve" 2>/dev/null || true
+rm -f "$ROOT/.nagual/nagual.db" "$ROOT/.nagual/nagual.db-shm" "$ROOT/.nagual/nagual.db-wal" \
+      "$ROOT/.nagual/nagual.dlq.db" "$ROOT/.nagual/.starters-seeded" "$ROOT/.nagual/current-pattern"
 bash "$ROOT/scripts/seed-nagual.sh"
 bash "$ROOT/.devcontainer/post-start.sh" >/dev/null 2>&1 || true
 echo "Done."

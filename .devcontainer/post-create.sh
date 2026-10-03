@@ -16,12 +16,17 @@ sudo -n chown node:node /usr/local/cargo/registry "$WS/nagual-qe/target" 2>/dev/
 
 # ── 1. Coding agents + the fleet CLI ──────────────────────────────────────────
 # agentic-qe is pinned: every Block 1 command was verified against this version (override: AQE_VERSION).
-AQE_VERSION="${AQE_VERSION:-3.14.4}"
+AQE_VERSION="${AQE_VERSION:-3.14.7}"
 step "Installing Claude Code, Codex CLI and agentic-qe $AQE_VERSION (global npm)"
 npm install -g --no-fund --no-audit \
   @anthropic-ai/claude-code \
   @openai/codex \
   "agentic-qe@$AQE_VERSION"
+
+# Optional facilitator tool; neither hands-on exercise uses the Ruflo proxy.
+if [ "${INSTALL_RUFLO_PROXY:-0}" = "1" ]; then
+  bash "$ROOT/.devcontainer/setup-ruflo-proxy.sh"
+fi
 
 # ── 2. The three project repos, optionally pinned to a known-good ref ─────────
 # A ref can be a branch, tag or full commit SHA. It is fetched explicitly: a shallow clone only

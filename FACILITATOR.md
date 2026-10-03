@@ -13,6 +13,15 @@
 - Run `make reset` in your own environment right before you start — the planted claim must be there.
 - Backup recordings of both hands-on blocks in case the room network dies (record with `asciinema`).
 
+Until the deck's command examples are updated, give these two cues aloud:
+
+- **Slide 13:** from the masterclass repo root, run `cd workspace/iron-pets` before any `aqe memory` command.
+- **Slide 23:** return to the repo root. Nagual defaults to `./nagual.db`, so add
+  `--db-path .nagual/nagual.db` to every `nagual knowledge` and `nagual learn record` command.
+  Replace placeholders before running; `success|failure` is a choice, not shell syntax.
+  For `success`, omit `--failure-mode`; for `failure`, choose a MAST mode and include feedback.
+  Exercise 02 has complete copyable commands.
+
 ## Timekeeping
 
 | Clock | Block | Cue |
@@ -38,20 +47,21 @@ vocabulary — it sets up hands-on #2's "whose words did you store it in?"
 |---|---|
 | `nagual` missing in someone's environment | `make setup` (re-runs post-create; ~2 min build on 4+ cores) — or pair them with a neighbour; the exercise is pairs anyway |
 | `aqe memory list` shows 0 entries | `make reset` (re-inits `.agentic-qe` in Iron Pets and reseeds) |
+| Node 20 or a `better-sqlite3` module-version error | Rebuild the Codespace with the updated Node 22 devcontainer. In an existing terminal, use `nvm use 22`, then reinstall `agentic-qe@3.14.7` under Node 22. |
 | Semantic-indexing warning on `aqe memory store` | Expected — no embedder endpoint configured. Pattern (glob) search is what the exercise uses. |
 | Iron Pets won't start | It's only for the UI demo; the memory exercises never touch it. Skip it. |
 | Codespaces quota / no GitHub account | DevPod on the presenter laptop, screen-shared; or the USB bundle + local Docker |
 | Room network dies | `cat` saved outputs from `examples/outputs/` and discuss |
 | Dashboard on :3333 shows nothing | `make nagual-ui`, then check `.nagual/serve.log` |
 
-## Known quirks (verified 28 Sep 2026, end-to-end in a fresh devcontainer)
+## Known quirks (verified 3 Oct 2026 in this Codespace)
 
 - **nagual-qe is pinned** in `post-create.sh` to the 0.2.0 merge commit (`2ddb7fa`, nagual-qe#40) (build fix for the dependabot sha3/sqlx/axum
   bumps, one asymmetric reward rule incl. security failures, trained router, semantic search over all patterns, `knowledge list` pagination, logs on stderr, `nagual serve` startup + local auth, PII redaction on the
   HTTP read path). Override with `NAGUAL_QE_REF=<ref>`.
-- **agentic-qe is pinned to 3.14.4** (`AQE_VERSION` overrides). Block 1 was verified against it; don't switch
+- **agentic-qe is pinned to 3.14.7** (`AQE_VERSION` overrides). Block 1 was verified against it; don't switch
   to `@latest` without running `make smoke`.
-- **Reward steps (nagual-qe 0.2.0, matches slide 19 once it adds the security row):** success +0.10,
+- **Reward steps (nagual-qe 0.2.0, matches slide 19):** success +0.10,
   partial +0.05, failure −0.15, security failure −0.30, clamped to [0, 1]. A fresh pattern: 0.50 → 0.35 on
   one failure, → 0.45 on a following success. `learn record` prints the step, so let the room read it off.
 - **`flaky` ≠ `flakes` — FTS vs semantic.** FTS5 has no stemming, so `search "flaky"` misses the cart starter;

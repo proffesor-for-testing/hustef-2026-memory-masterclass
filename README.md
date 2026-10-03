@@ -30,11 +30,16 @@ All three read the same `.devcontainer/` — you get identical tools whichever y
 make check
 ```
 
+If an older Codespace reports Node 20, rebuild the container from the updated
+`.devcontainer/` configuration. The current setup uses Node 22 and pins
+`agentic-qe` to 3.14.7. Rebuilding also recompiles its native SQLite module for
+the active Node version.
+
 ## What's inside the container
 
 | Tool | Why it's here |
 |---|---|
-| Node 20, Rust, Python 3.12 | runtimes for the three projects |
+| Node 22, Rust, Python 3.12 | runtimes for the three projects; agentic-qe requires Node >=22.13 |
 | `claude` (Claude Code) and `codex` (OpenAI Codex CLI) | coding agents, for the optional "drive the fleet" demo — bring your own login |
 | `aqe` — [agentic-qe](https://github.com/proffesor-for-testing/agentic-qe) | the fleet and its **operational memory** (Block 1) |
 | `nagual` — [nagual-qe](https://github.com/proffesor-for-testing/nagual-qe), built from source | the self-learning **meta-memory** (Block 2) |
@@ -73,7 +78,16 @@ make reset     # wipe + reseed both memory systems (between attempts, or between
 make ironpets  # start the Iron Pets app on :3000 / :3001 (optional — only for the UI demo)
 make nagual-ui # (re)start the Nagual dashboard on :3333
 make smoke     # facilitator pre-flight: run every exercise command, then reset
+make ruflo-proxy # optional facilitator setup for Ruflo Meta-Proxy
 ```
+
+Ruflo is optional and is not used in either hands-on exercise. `make ruflo-proxy`
+installs Ruflo 3.51.1 and its signed Meta-Proxy 0.7.5 artifact, starts the local
+proxy, and checks its authenticated status endpoint. Ruflo 3.51.1 may print an
+activation error because its `/version` probe returns 404 on that proxy release;
+the setup command checks the verified artifact and live `/status` endpoint instead.
+To install it automatically in a facilitator prebuild, set `INSTALL_RUFLO_PROXY=1`
+for the post-create command.
 
 ## Taking it home
 

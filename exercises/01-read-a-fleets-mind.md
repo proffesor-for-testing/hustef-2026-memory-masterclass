@@ -42,6 +42,8 @@ aqe memory get --key flaky/cart-total-e2e  --namespace aqe --include-metadata
 
 Each value is a small JSON object with a `claim` and an `evidence` list. One of them has
 `"evidence": []`.
+The paths under `artifacts/` are simulated run receipts created by the seed script;
+you can open them to inspect the evidence behind the other entries.
 
 > Say it out loud when you find it. First pair to name the key and explain *why the gate is now wrong*
 > wins nothing but respect.
@@ -68,4 +70,6 @@ aqe memory store --key test-plan/wishlist --namespace aqe \
   --value '{"claim":"wishlist add/remove covered","evidence":["tests/wishlist.spec.ts"],"agent":"you"}'
 ```
 
-Commands verified against agentic-qe 3.14.4 (the version the devcontainer installs) — `aqe memory store | get | search | list | delete | share | usage`.
+Commands verified against agentic-qe 3.14.7 (the version the devcontainer installs) — `aqe memory store | get | search | list | delete | share | usage`.
+On 3.14.7, the optional store command may warn that semantic vector indexing is unavailable.
+The entry is still stored; this exercise uses pattern search and needs no embedder endpoint.

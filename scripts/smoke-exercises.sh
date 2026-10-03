@@ -8,8 +8,8 @@ export PATH="$HOME/.local/bin:$HOME/.cargo/bin:$PATH"
 cd /workspaces/masterclass
 echo "bashrc filter blocks: $(grep -c "init-log filter" ~/.bashrc)"; eval "$(sed -n "/^aqe() {/,/^}/p" ~/.bashrc)"; type aqe | head -1
 h(){ printf '\n\033[1;35m######## %s\033[0m\n' "$*"; }
-h "00 make reset"; make reset; echo "exit=$?"
-h "00 make check"; make check; echo "exit=$?"
+h "00 make reset"; make reset || exit 1; echo "exit=0"
+h "00 make check"; make check || exit 1; echo "exit=0"
 
 h "01 step1 list"; cd workspace/iron-pets; aqe memory list --namespace aqe; echo "exit=$?"
 h "01 step2 search *cart*"; aqe memory search --pattern "*cart*" --namespace aqe; echo "exit=$?"
@@ -41,8 +41,14 @@ h "03 piece2 wrapper, no pattern in play: must still run + keep exit code"; rm -
 h "03 piece2 record-outcome (wrapper mode)"; mkdir -p .nagual; echo $ID > .nagual/current-pattern; bash examples/hooks/record-outcome.sh -- bash -c 'echo "npm test"; exit 1'; echo "exit=$? (want 1)"
 h "03 piece2 record-outcome (hook mode, PostToolUse JSON)"; printf '{"tool_input":{"command":"cargo test"},"tool_response":{"exit_code":0}}' | bash examples/hooks/record-outcome.sh; echo "exit=$?"
 nagual knowledge get $ID --db-path $NAGUAL_DB | grep -iE "reward|usage|reuse"
+h "03 piece2 missing exit code must not record success"; BEFORE=$(nagual knowledge get "$ID" --json --db-path "$NAGUAL_DB" | jq -r '.reward')
+printf '{"tool_input":{"command":"cargo test"},"tool_response":{}}' | bash examples/hooks/record-outcome.sh
+AFTER=$(nagual knowledge get "$ID" --json --db-path "$NAGUAL_DB" | jq -r '.reward')
+[ "$BEFORE" = "$AFTER" ] || { echo "missing exit code changed reward: $BEFORE -> $AFTER"; exit 1; }
 rm -f .nagual/current-pattern
-h "03 piece3 preload"; mkdir -p workspace/iron-pets/.agentic-qe; bash examples/hooks/preload-patterns.sh qe.flaky qe.regression qe.nonexistent; echo "exit=$?"
+h "03 piece3 preload"; bash examples/hooks/preload-patterns.sh qe.flaky qe.regression qe.nonexistent > workspace/iron-pets/.agentic-qe/PRELOAD.md || exit 1
+rg -q '^- Solution:' workspace/iron-pets/.agentic-qe/PRELOAD.md || { echo "preload lacks a proposed solution"; exit 1; }
+cat workspace/iron-pets/.agentic-qe/PRELOAD.md; echo "exit=0"
 
 h "dashboard"; for i in $(seq 1 20); do curl -s -o /dev/null http://localhost:3333/ && break; sleep 0.5; done
 curl -s -o /dev/null -w "GET / -> %{http_code}\n" http://localhost:3333/

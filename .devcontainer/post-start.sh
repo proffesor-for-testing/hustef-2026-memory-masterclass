@@ -9,6 +9,11 @@ if command -v nagual >/dev/null 2>&1 && ! pgrep -f "[n]agual serve" >/dev/null 2
   ( cd "$ROOT/.nagual" && nohup nagual serve --port 3333 --db-path "$ROOT/.nagual/nagual.db" >"$ROOT/.nagual/serve.log" 2>&1 & ) || true
 fi
 
+# Restore the optional facilitator proxy after a Codespace restart.
+if [ -f "$HOME/.ruflo/proxy/install-manifest.json" ]; then
+  bash "$ROOT/.devcontainer/setup-ruflo-proxy.sh" || echo 'Ruflo proxy needs attention: run make ruflo-proxy'
+fi
+
 cat <<'EOF'
 
   HUSTEF 2026 · Memory as a Quality Signal

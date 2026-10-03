@@ -2,13 +2,16 @@ SHELL := /bin/bash
 ROOT  := $(shell pwd)
 export PATH := $(HOME)/.local/bin:$(HOME)/.cargo/bin:$(PATH)
 
-.PHONY: check reset seed ironpets nagual-ui setup smoke help
+.PHONY: check reset seed ironpets nagual-ui ruflo-proxy setup smoke help
 
 check:        ## verify every tool is installed and reachable
 	@bash .devcontainer/verify.sh
 
 setup:        ## (re)run the full post-create setup
 	@bash .devcontainer/post-create.sh
+
+ruflo-proxy:  ## install and verify the optional Ruflo Meta-Proxy
+	@bash .devcontainer/setup-ruflo-proxy.sh
 
 reset:        ## wipe + reseed both memory systems
 	@bash scripts/reset.sh

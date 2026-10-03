@@ -26,6 +26,12 @@ bash ../../examples/hooks/memory-write-gate.sh test-plan/cart \
 
 It lands under `claims/test-plan/cart`, not `test-plan/cart`. The gate can't be argued with.
 
+Return to the masterclass repo root before running the remaining examples:
+
+```bash
+cd ../..
+```
+
 ## Piece 2 — record outcomes at tool boundaries (`examples/hooks/record-outcome.sh`)
 
 A Claude Code `PostToolUse` hook: when a test command exits, it records `success` or `failure` against the
@@ -36,11 +42,11 @@ red run stays red.
 
 ## Piece 3 — preload (`examples/hooks/preload-patterns.sh`)
 
-Before a run, pull the top-tier patterns for the domains you're about to touch and drop them into the
-agent's context file:
+Before a run, pull the highest-reward patterns for the domains you're about to touch and drop them into the
+agent's context file. This example includes each proposed solution:
 
 ```bash
-bash examples/hooks/preload-patterns.sh qe.flaky qe.regression > .agentic-qe/PRELOAD.md
+bash examples/hooks/preload-patterns.sh qe.flaky qe.regression > workspace/iron-pets/.agentic-qe/PRELOAD.md
 ```
 
 ## What to take home

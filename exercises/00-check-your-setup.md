@@ -10,6 +10,11 @@ Every line should show a green ✔. Two yellow bullets about API keys are fine �
 a key if you want to drive the fleet with Claude Code or Codex during Block 1's optional demo.
 The memory exercises themselves need **no** API key and send **nothing** to any cloud.
 
+If `node` reports version 20, rebuild the devcontainer before retrying setup.
+The fleet needs Node 22.13 or newer. A version-only `aqe` check cannot detect a
+SQLite module compiled for the wrong Node version; `make check` also runs a real
+fleet memory command.
+
 If `nagual` is missing, the Rust build didn't finish. Run it now — it takes 5–10 minutes and you
 can keep reading:
 

@@ -19,11 +19,17 @@ if [ "${1:-}" = "--" ]; then          # wrapper mode: run the command ourselves
 else                                  # hook mode: read Claude Code's PostToolUse payload
   PAYLOAD="$(cat)"
   CMD="$(printf '%s' "$PAYLOAD" | jq -r '.tool_input.command // empty')"
-  CODE="$(printf '%s' "$PAYLOAD" | jq -r '.tool_response.exit_code // .tool_response.exitCode // 0')"
+  CODE="$(printf '%s' "$PAYLOAD" | jq -r '.tool_response.exit_code // .tool_response.exitCode // empty')"
 fi
 
 # In wrapper mode the wrapped command's exit code is passed through — a red test run must stay red.
 finish() { if [ "$MODE" = wrapper ]; then exit "$CODE"; else exit 0; fi; }
+
+# Missing exit status is unknown, never a success. Some tool responses omit it.
+if [ "$MODE" = hook ] && ! [[ "$CODE" =~ ^[0-9]+$ ]]; then
+  echo 'outcome not recorded: tool response has no exit code' >&2
+  finish
+fi
 
 [ -s "$PID_FILE" ] || finish          # nothing in play → nothing to record
 PATTERN_ID="$(tail -n1 "$PID_FILE")"

@@ -1,5 +1,5 @@
-# Node 20 LTS on Debian bookworm — the official devcontainers image, so Codespaces prebuilds work.
-FROM mcr.microsoft.com/devcontainers/typescript-node:1-20-bookworm
+# Node 22 on Debian bookworm. agentic-qe 3.14.7 requires Node >=22.13.
+FROM mcr.microsoft.com/devcontainers/typescript-node:22-bookworm
 
 # Build deps for nagual-qe (Rust + SQLite + OpenSSL), plus the small tools the exercises use.
 RUN apt-get update \
